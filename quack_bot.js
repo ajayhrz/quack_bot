@@ -48,8 +48,9 @@ async function scrollDownHumanLike(page) {
 
 (async () => {
   console.log("Launching Chromium browser in headed mode...");
+  const isHeadless = process.env.CI === 'true' || process.env.HEADLESS === 'true';
   const browser = await chromium.launch({ 
-    headless: false,
+    headless: isHeadless,
     slowMo: 0
   });
   

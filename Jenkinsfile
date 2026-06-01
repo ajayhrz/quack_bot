@@ -2,8 +2,13 @@ pipeline {
     agent any
 
     tools {
-        // Ensure NodeJS is configured in your Jenkins Global Tool Configuration
+        // Ensure NodeJS is configured in your Jenkins Global Tool Configuration with this name
         nodejs 'NodeJS' 
+    }
+
+    environment {
+        // Setting this ensures Playwright runs without a visible UI in Jenkins
+        CI = 'true'
     }
 
     stages {
@@ -20,25 +25,16 @@ pipeline {
                 
                 echo 'Installing Playwright browsers...'
                 sh 'npx playwright install chromium'
+                // Install OS dependencies required for headless Chromium
+                sh 'npx playwright install-deps chromium' 
             }
         }
         
-        stage('Syntax Check') {
+        stage('Run Quack Bot') {
             steps {
-                echo 'Performing syntax check on the bot script...'
-                sh 'node --check quack_bot.js'
-            }
-        }
-        
-        // Note: Running the bot requires a display (headless: false) and credentials.
-        // If you want to run the bot in CI, set headless: true in the script and uncomment below.
-        /*
-        stage('Run Bot') {
-            steps {
-                echo 'Running the bot...'
+                echo 'Running the bot in headless mode...'
                 sh 'node quack_bot.js'
             }
         }
-        */
     }
 }
