@@ -1,14 +1,11 @@
 pipeline {
     agent any
 
-    tools {
-        // Ensure NodeJS is configured in your Jenkins Global Tool Configuration with this name
-        nodejs 'NodeJS' 
-    }
-
     environment {
         // Setting this ensures Playwright runs without a visible UI in Jenkins
         CI = 'true'
+        // Ensures Jenkins can find Node on your Mac
+        PATH = "/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
     }
 
     stages {
